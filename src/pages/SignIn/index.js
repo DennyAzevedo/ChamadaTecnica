@@ -1,15 +1,19 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../contexts/auth';
 import './signin.css';
 import logo from '../../assets/logo.png';
 
 function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { signIn, loadingAuth} = useContext(AuthContext);
 
   function handleSubmit(e){
     e.preventDefault();
-    alert('CLICOU')
+    if(email !== '' && password !== ''){
+      signIn(email, password)
+    }
   }
 
   return (
