@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../contexts/auth';
 import './signin.css';
@@ -37,7 +37,7 @@ function SignIn() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button type="submit">Acessar</button>
+          <button type="submit">{loadingAuth ? 'Carregando...' : 'Acessar'}</button>
         </form>  
         <Link to="/register">Criar uma conta</Link>
       </div>

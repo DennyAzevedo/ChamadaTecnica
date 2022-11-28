@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../contexts/auth';
 import logo from '../../assets/logo.png';
@@ -42,7 +42,7 @@ function SignUp() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button type="submit">Cadastrar</button>
+          <button type="submit">{loadingAuth ? 'Carregando...' : 'Cadastrar'}</button>
         </form>  
         <Link to="/">Já tem uma conta? Entre</Link>
       </div>

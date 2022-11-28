@@ -23,9 +23,8 @@ function AuthProvider({ children }){
 
   async function signIn(email, password){
     setLoadingAuth(true);
-      await firebase.auth()
-        .signInWithEmailAndPassword(email, password)
-        .then(async (value)=> {
+    await firebase.auth().signInWithEmailAndPassword(email, password)
+    .then(async (value)=> {
       let uid = value.user.uid;
       const userProfile = await firebase
         .firestore()
@@ -47,16 +46,15 @@ function AuthProvider({ children }){
       setLoadingAuth(false);
     })
   }
+
   async function signUp(email, password, nome){
     setLoadingAuth(true);
     await firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
-      .then( async (value)=>{
+      .then(async (value)=> {
       let uid = value.user.uid;
-      await firebase
-        .firestore()
-        .collection('users')
+      await firebase.firestore().collection('users')
         .doc(uid).set({
           nome: nome,
           avatarUrl: null,
