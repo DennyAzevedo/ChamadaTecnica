@@ -14,7 +14,9 @@ export default function Customers(){
 	function handleAdd(e) {
     e.preventDefault();
     if(nomeFantasia !== '' && cnpj !== '' && endereco !== ''){
-      firebase.firestore().collection('customers')
+			firebase
+				.firestore()
+				.collection('customers')
 				.add({
 					nomeFantasia: nomeFantasia,
 					cnpj: cnpj,
