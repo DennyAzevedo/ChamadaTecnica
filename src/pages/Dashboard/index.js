@@ -31,7 +31,7 @@ export default function Dashboard() {
     }
   }, []);
 
-  async function loadChamados(){
+  async function loadChamados() {
     await listRef
       .limit(5)
       .get()
@@ -45,7 +45,7 @@ export default function Dashboard() {
     setLoading(false);
   }
 
-  async function updateState(snapshot){
+  async function updateState(snapshot) {
     const isCollectionEmpty = snapshot.size === 0;
     if(!isCollectionEmpty){
       let lista = [];
@@ -69,6 +69,33 @@ export default function Dashboard() {
       setIsEmpty(true);
     }
     setLoadingMore(false);
+  }
+
+  async function handleMore() {
+    setLoadingMore(true);
+    await listRef
+      .startAfter(lastDocs)
+      .limit(5)
+      .get()
+      .then((snapshot)=>{
+        updateState(snapshot)
+      })
+  }
+
+  if (loading) {
+    return(
+      <div>
+        <Header/>
+        <div className="content">
+          <Title name="Atendimentos">
+            <FiMessageSquare size={25} />
+          </Title>  
+          <div className="container dashboard">
+            <span>Buscando chamados...</span>
+          </div>
+        </div>      
+      </div>
+    )
   }
 
   return (
@@ -121,7 +148,17 @@ export default function Dashboard() {
                   </td>
                 </tr>
               </tbody>
-            </table>  
+            </table>
+            {loadingMore &&
+              <h3 style={{ textAlign: 'center', marginTop: 15 }}>
+                Buscando dados...
+              </h3>
+            }
+            {!loadingMore && !isEmpty &&
+              <button className="btn-more" onClick={handleMore}>
+                Buscar mais
+              </button>
+            }  
           </>
         )}
       </div>
