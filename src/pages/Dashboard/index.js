@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '../../components/Header';
 import Title from '../../components/Title';
 import {
@@ -8,10 +8,68 @@ import {
   FiEdit2
 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import { format } from 'date-fns';
+import firebase from '../../services/firebaseConnection';
 import './dashboard.css';
+
+const listRef = firebase
+  .firestore()
+  .collection('chamados')
+  .orderBy('created', 'desc');
 
 export default function Dashboard() {
   const [chamados, setChamados] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(false);
+  const [lastDocs, setLastDocs] = useState();
+
+  useEffect(()=> {
+    loadChamados();
+    return () => {
+
+    }
+  }, []);
+
+  async function loadChamados(){
+    await listRef
+      .limit(5)
+      .get()
+      .then((snapshot) => {
+        updateState(snapshot)
+      })
+      .catch((err) => {
+        console.log('Deu algum erro: ', err);
+        setLoadingMore(false);
+      })
+    setLoading(false);
+  }
+
+  async function updateState(snapshot){
+    const isCollectionEmpty = snapshot.size === 0;
+    if(!isCollectionEmpty){
+      let lista = [];
+      snapshot.forEach((doc) => {
+        lista.push({
+          id: doc.id,
+          assunto: doc.data().assunto,
+          cliente: doc.data().cliente,
+          clienteId: doc.data().clienteId,
+          created: doc.data().created,
+          createdFormated: format(doc.data().created.toDate(), 'dd/MM/yyyy'),
+          status: doc.data().status,
+          complemento: doc.data().complemento
+        })
+      })
+      //Pegando o ultimo documento buscado
+      const lastDoc = snapshot.docs[snapshot.docs.length -1]; 
+      setChamados(chamados => [...chamados, ...lista]);
+      setLastDocs(lastDoc);
+    } else {
+      setIsEmpty(true);
+    }
+    setLoadingMore(false);
+  }
 
   return (
     <div>
