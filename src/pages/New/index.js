@@ -98,7 +98,11 @@ export default function New() {
 					<form className="form-profile" onSubmit={handleRegister} >
 						<label>Cliente</label>
             {loadCustomers ? (
-              <input type="text" disabled={true} value="Carregando clientes..." />
+							<input
+								type="text"
+								disabled={true}
+								value="Carregando clientes..."
+							/>
             ) : (
               <select value={customerSelected} onChange={handleChangeCustomers} >
                 {customers.map((item, index) => {

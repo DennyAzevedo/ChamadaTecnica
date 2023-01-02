@@ -5,6 +5,7 @@ import SignUp from '../pages/SignUp';
 import Dashboard from '../pages/Dashboard';
 import Profile from '../pages/Profile';
 import Customers from '../pages/Customers';
+import New from '../pages/New'
 
 export default function Routes() {
 	return (

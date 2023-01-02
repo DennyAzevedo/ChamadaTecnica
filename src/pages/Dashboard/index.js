@@ -10,6 +10,7 @@ import {
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import firebase from '../../services/firebaseConnection';
+import Modal from '../../components/Modal';
 import './dashboard.css';
 
 const listRef = firebase
@@ -23,12 +24,12 @@ export default function Dashboard() {
   const [loadingMore, setLoadingMore] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
   const [lastDocs, setLastDocs] = useState();
+  const [showPostModal, setShowPostModal] = useState(false);
+  const [detail, setDetail] = useState();
 
   useEffect(()=> {
     loadChamados();
-    return () => {
-
-    }
+    return () => {}
   }, []);
 
   async function loadChamados() {
@@ -80,6 +81,11 @@ export default function Dashboard() {
       .then((snapshot)=>{
         updateState(snapshot)
       })
+  }
+
+  function togglePostModal(item) {
+    setShowPostModal(!showPostModal);
+    setDetail(item);
   }
 
   if (loading) {
@@ -162,6 +168,12 @@ export default function Dashboard() {
           </>
         )}
       </div>
+      {showPostModal && (
+        <Modal
+          conteudo={detail}
+          close={togglePostModal}
+        />
+      )}
     </div>
   );
 }
